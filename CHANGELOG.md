@@ -1,11 +1,9 @@
-# Pre=Release
+# Beta
 
-## [3.0] - 11.24.24
+## [3.2.1-beta] - 12.2.24
 
 ### Added
-- Added ``Go`` Button
-- Centered all elements
-- Changed font family to Arial and Sans Serif.
+- Added ability to open URL's with multiple periods in it, e.g. ``example.mit.net``.
 
-### Bugs - 1 (First bug! Yay!)
-- If user types invalid URL, the error text will appear perminently until the page is refreshed. 
+### Changes
+- Changed background to White.
