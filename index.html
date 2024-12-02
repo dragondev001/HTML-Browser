@@ -3,41 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open URL</title>
+    <title>Open URL in Blank Page</title>
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
         .error {
             color: red;
             font-size: 0.9em;
             display: none;
             margin-top: 5px;
         }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 1em;
+        }
+        input {
+            width: 250px;
+        }
+        button {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <h1 text-align="center">Open a Website</h1>
+    <h1>Open a Website</h1>
     <label for="urlInput">Enter website URL:</label>
     <input type="text" id="urlInput" placeholder="example.com">
     <button id="openButton">Open</button>
     <p class="error" id="errorText">Please enter a valid URL with a valid domain (e.g., example.com).</p>
 
     <script>
-        document.getElementById('openButton').addEventListener('click', function () {
-            const input = document.getElementById('urlInput').value.trim();
-            const errorText = document.getElementById('errorText');
+       document.getElementById('openButton').addEventListener('click', function () {
+    const input = document.getElementById('urlInput').value.trim();
+    const errorText = document.getElementById('errorText');
 
-            // Regular expression to check for a valid domain
-            const domainRegex = /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Adjusted regex to allow URLs with multiple periods and optional protocols
+    const domainRegex = /^(https?:\/\/)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(:\d+)?(\/.*)?$/;
 
-            if (domainRegex.test(input)) {
-                // If valid, construct the full URL and open in a new tab
-                const fullUrl = `https://www.${input}`;
-                window.open(fullUrl, '_blank');
-                errorText.style.display = 'none'; // Hide the error message if previously shown
-            } else {
-                // If invalid, show an error message
-                errorText.style.display = 'block';
-            }
-        });
+    if (domainRegex.test(input)) {
+        // Ensure the URL has a protocol; default to https if missing
+        const fullUrl = input.startsWith('http://') || input.startsWith('https://') ? input : `https://${input}`;
+
+        // Open a new blank page
+        const newTab = window.open('about:blank', '_blank');
+        if (newTab) {
+            // Write the full URL into the new page using an iframe
+            newTab.document.write(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Embedded Website</title>
+                </head>
+                <body style="margin: 0; padding: 0;">
+                    <iframe src="${fullUrl}" width="100%" height="715px" style="border: none;"></iframe>
+                </body>
+                </html>
+            `);
+            newTab.document.close();
+            errorText.style.display = 'none'; // Hide the error message if previously shown
+        }
+    } else {
+        // If invalid, show an error message
+        errorText.style.display = 'block';
+    }
+});
     </script>
 </body>
 </html>
