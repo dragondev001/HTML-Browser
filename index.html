@@ -3,10 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Embed Torn.com</title>
+    <title>Open URL</title>
+    <style>
+        .error {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Torn.com</h1>
-    <iframe src="https://www.torn.com" width="100%" height="800px" frameborder="0"></iframe>
+    <h1 text-align="center">Open a Website</h1>
+    <label for="urlInput">Enter website URL:</label>
+    <input type="text" id="urlInput" placeholder="example.com">
+    <button id="openButton">Open</button>
+    <p class="error" id="errorText">Please enter a valid URL with a valid domain (e.g., example.com).</p>
+
+    <script>
+        document.getElementById('openButton').addEventListener('click', function () {
+            const input = document.getElementById('urlInput').value.trim();
+            const errorText = document.getElementById('errorText');
+
+            // Regular expression to check for a valid domain
+            const domainRegex = /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            if (domainRegex.test(input)) {
+                // If valid, construct the full URL and open in a new tab
+                const fullUrl = `https://www.${input}`;
+                window.open(fullUrl, '_blank');
+                errorText.style.display = 'none'; // Hide the error message if previously shown
+            } else {
+                // If invalid, show an error message
+                errorText.style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>
